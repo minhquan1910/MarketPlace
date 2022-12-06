@@ -5,6 +5,7 @@ import { resolveIPFS } from 'utils/resolveIPFS';
 import { INFTCard } from './types';
 import { Button } from 'antd';
 import { getExplorer } from '../../../../helpers/networks';
+import Link from 'next/link';
 
 const NFTCard: FC<INFTCard> = ({ amount, contractType, name, symbol, metadata, chain, tokenAddress }) => {
   const bgColor = useColorModeValue('none', 'gray.700');
@@ -52,13 +53,9 @@ const NFTCard: FC<INFTCard> = ({ amount, contractType, name, symbol, metadata, c
         </Box>
       </SimpleGrid>
       <SimpleGrid columns={2} spacing={4} padding={2.5} borderRadius="xl" marginTop={2}>
-        <Button
-          onClick={() => {
-            window.open(`${getExplorer(chain)}address/${tokenAddress}`, '_blank');
-          }}
-        >
-          <span>Tx Info</span>
-        </Button>
+        <Link href={`${getExplorer(chain)}address/${tokenAddress}`} target="_blank">
+          Tx info
+        </Link>
         <Button>
           <span>List</span>
         </Button>
