@@ -12,6 +12,7 @@
     "deploypage": "gh-pages -d .next"
   },
   "dependencies": {
+    "@ant-design/icons": "^4.8.0",
     "@chakra-ui/icons": "^2.0.8",
     "@chakra-ui/react": "^2.2.8",
     "@emotion/react": "^11",
@@ -19,6 +20,7 @@
     "@moralisweb3/eslint-config": "^1.0.0",
     "@web3uikit/core": "^0.1.5",
     "@web3uikit/icons": "^0.1.5",
+    "antd": "^5.0.4",
     "axios": "^0.27.2",
     "ethers": "^5.6.9",
     "framer-motion": "^6",
