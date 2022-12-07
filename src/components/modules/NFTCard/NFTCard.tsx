@@ -3,8 +3,11 @@ import { Eth } from '@web3uikit/icons';
 import { FC } from 'react';
 import { resolveIPFS } from 'utils/resolveIPFS';
 import { INFTCard } from './types';
+import { Button } from 'antd';
+import Link from 'next/link';
+import { getExplorer } from '../../../../helpers/networks';
 
-const NFTCard: FC<INFTCard> = ({ amount, contractType, name, symbol, metadata }) => {
+const NFTCard: FC<INFTCard> = ({ amount, contractType, name, symbol, metadata, chain, tokenAddress }) => {
   const bgColor = useColorModeValue('none', 'gray.700');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
   const descBgColor = useColorModeValue('gray.100', 'gray.600');
@@ -48,6 +51,14 @@ const NFTCard: FC<INFTCard> = ({ amount, contractType, name, symbol, metadata })
             {amount}
           </Box>
         </Box>
+      </SimpleGrid>
+      <SimpleGrid columns={2} spacing={4} padding={2.5} borderRadius="xl" marginTop={2}>
+        <Link href={`${getExplorer(chain)}address/${tokenAddress}`} target="_blank">
+          Tx info
+        </Link>
+        <Button>
+          <span>List</span>
+        </Button>
       </SimpleGrid>
     </Box>
   );
