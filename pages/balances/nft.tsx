@@ -6,6 +6,7 @@ import { NFTBalances } from 'components/templates/balances/NFT';
 import constants from '../../constants';
 import Moralis from 'moralis';
 
+
 const ERC20: NextPage<INFTBalances> = (props) => {
   return (
     <Default pageName="NFT Balances">

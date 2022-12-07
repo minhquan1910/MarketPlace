@@ -1,16 +1,32 @@
 import { Box, HStack, Image, SimpleGrid, useColorModeValue } from '@chakra-ui/react';
 import { Eth } from '@web3uikit/icons';
-import { FC } from 'react';
+import { FC, useState } from 'react';
 import { resolveIPFS } from 'utils/resolveIPFS';
 import { INFTCard } from './types';
 import { Button } from 'antd';
 import Link from 'next/link';
 import { getExplorer } from '../../../../helpers/networks';
+import constants from '../../../../constants';
+import { usePrepareContractWrite, useContractWrite, useWaitForTransaction } from 'wagmi';
 
 const NFTCard: FC<INFTCard> = ({ amount, contractType, name, symbol, metadata, chain, tokenAddress }) => {
   const bgColor = useColorModeValue('none', 'gray.700');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
   const descBgColor = useColorModeValue('gray.100', 'gray.600');
+  const [params] = useState(["0x1855A8477202A18F3c47e75373263CCB3fE30FBd", 1683, "200000000000000000"])
+
+
+  const { config } = usePrepareContractWrite({
+    addressOrName: constants.MRKPLACE_ADDR,
+    contractInterface: ["function createMarketItem(address, uint256, uint256) public payable"],
+    functionName: "createMarketItem",
+    args: params
+  })
+
+  const { data, write } = useContractWrite(config);
+  const { isLoading } = useWaitForTransaction({
+    hash: data?.hash
+  })
 
   return (
     <Box maxWidth="315px" bgColor={bgColor} padding={3} borderRadius="xl" borderWidth="1px" borderColor={borderColor}>
@@ -56,7 +72,7 @@ const NFTCard: FC<INFTCard> = ({ amount, contractType, name, symbol, metadata, c
         <Link href={`${getExplorer(chain)}address/${tokenAddress}`} target="_blank">
           Tx info
         </Link>
-        <Button>
+        <Button loading={isLoading} onClick={() => write?.()}>
           <span>List</span>
         </Button>
       </SimpleGrid>

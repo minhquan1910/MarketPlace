@@ -3,6 +3,7 @@ import Moralis from "moralis";
 import { Default } from "components/layouts/Default";
 import { INFTMarketplace } from "components/templates/Marketplace/types";
 import { Marketplace } from "components/templates/Marketplace";
+import constants from "../constants";
 
 const MarketPlacePage: NextPage<INFTMarketplace> = (props) => {
     return (
@@ -16,9 +17,10 @@ export const getServerSideProps: GetServerSideProps = async () => {
 
     await Moralis.start({ apiKey: process.env.MORALIS_API_KEY })
 
-    const items = await Moralis.EvmApi.account.getNFTs({
-        address: "0xfd8c907934Cb665FD5c2D3e0bcA75bFF6132CeF0",
+    const items = await Moralis.EvmApi.account.getNFTsForContract({
+        address: constants.MRKPLACE_ADDR,
         chain: process.env.APP_CHAIN_ID,
+        tokenAddress: constants.NFT_ADDR
     })
 
     return {
