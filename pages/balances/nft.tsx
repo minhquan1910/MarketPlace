@@ -30,7 +30,6 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     tokenAddress: constants.NFT_ADDR,
   });
 
-  // (balances.result).filter((balance)=> balance.result.)
 
   return {
     props: {
