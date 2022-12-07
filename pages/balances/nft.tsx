@@ -3,6 +3,7 @@ import { GetServerSideProps, NextPage } from 'next';
 import { getSession } from 'next-auth/react';
 import { INFTBalances } from 'components/templates/balances/NFT/types';
 import { NFTBalances } from 'components/templates/balances/NFT';
+import constants from '../../constants';
 import Moralis from 'moralis';
 
 const ERC20: NextPage<INFTBalances> = (props) => {
@@ -25,7 +26,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   const balances = await Moralis.EvmApi.account.getNFTsForContract({
     address: session?.user.address,
     chain: process.env.APP_CHAIN_ID,
-    tokenAddress: "0x1855A8477202A18F3c47e75373263CCB3fE30FBd",
+    tokenAddress: constants.NFT_ADDR,
   });
 
   // (balances.result).filter((balance)=> balance.result.)
