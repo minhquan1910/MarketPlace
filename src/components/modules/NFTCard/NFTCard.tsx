@@ -8,51 +8,45 @@ import { Button, Input, Modal } from 'antd';
 import Link from 'next/link';
 import { getExplorer } from '../../../../helpers/networks';
 import constants from '../../../../constants';
-import { usePrepareContractWrite, useContractWrite } from 'wagmi';
+import { usePrepareContractWrite, useContractWrite, useSigner } from 'wagmi';
 import styles from "./NFTCard.module.css"
+import { BigNumber, ethers, Signer } from 'ethers';
 
-const NFTCard: FC<INFTCard> = ({ amount, contractType, name, symbol, metadata, chain, tokenAddress }) => {
+const NFTCard: FC<INFTCard> = ({ amount, contractType, name, symbol, metadata, chain, tokenAddress, tokenId }) => {
   const bgColor = useColorModeValue('none', 'gray.700');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
   const descBgColor = useColorModeValue('gray.100', 'gray.600');
-
-
+  const {data: signer} = useSigner();
   const [visible, setVisibility] = useState<boolean>(false);
-  const [price, setPrice] = useState<number | string>()
+  const [price, setPrice] = useState<string>()
 
-  const [params] = useState(["0x1855A8477202A18F3c47e75373263CCB3fE30FBd", 1683, "200000000000000000"])
-
-
-  const { config } = usePrepareContractWrite({
-    addressOrName: constants.MRKPLACE_ADDR,
-    contractInterface: ["function createMarketItem(address, uint256, uint256) public payable"],
-    functionName: "createMarketItem",
-    args: params
-  })
-
-  const { write } = useContractWrite({
-    ...config,
-    onSuccess(data) {
-      console.log("Success", data)
-    },
-    onError(error) {
-      console.log("Error", error)
-    }
-  });
+  const nftCollection = new ethers.Contract(constants.NFT_ADDR, constants.NFT_ABI, signer as Signer)
+  const marketPlace = new ethers.Contract(constants.MRKPLACE_ADDR, constants.MRKPLACE_ABI, signer as Signer)
 
   const handleSellClick = () => {
-    write?.();
-    setVisibility(true);
+    setVisibility(true)
   };
 
   const onChangePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const priceValue:string = ethers.utils.parseEther(e.target.value).toString()
+    setPrice(priceValue);
+  }
 
-    setPrice(e.target.value);
+  const handleSell = async() => {
+    setVisibility(false);
+    console.log("Input", price)
+    console.log("Signer ", signer)
+    const approveFunc = await nftCollection.approve(constants.MRKPLACE_ADDR, tokenId)
+    const tx = await approveFunc.wait();
+    console.log("Approve tx ", tx)
+    const createItem = await marketPlace.createMarketItem(constants.NFT_ADDR,tokenId, price);
+    const itemTx = await createItem.wait();
+    console.log("Create Item Tx", itemTx)
   }
 
   const listModal = <Modal
     title="Sell"
-    visible={visible}
+    open={visible}
     onCancel={() => setVisibility(false)}
     footer={[
       <Button
@@ -64,7 +58,7 @@ const NFTCard: FC<INFTCard> = ({ amount, contractType, name, symbol, metadata, c
       </Button>,
       <Button key="3"
         type='primary'
-        className='btnAution'>
+        className='btnAution' onClick={handleSell}>
         Sell
       </Button>
     ]}
@@ -77,6 +71,7 @@ const NFTCard: FC<INFTCard> = ({ amount, contractType, name, symbol, metadata, c
         marginBottom: "15px",
       }}>
       <img
+        src={resolveIPFS(metadata?.image as string)}
         alt=""
         className={styles.image}
         width="350"
