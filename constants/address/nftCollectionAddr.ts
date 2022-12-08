@@ -1,5 +1,5 @@
 const nftCollectionAddr = {
-    testnet: "0x1855A8477202A18F3c47e75373263CCB3fE30FBd",
+    testnet: "0x454aF6ff856578860e3696b18c54a8634c6953A0",
     mainnet: ""
 }
 export default nftCollectionAddr;

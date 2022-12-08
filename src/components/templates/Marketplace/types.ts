@@ -1,5 +1,6 @@
 import { EvmNftContractType } from '@moralisweb3/evm-utils';
 import { MoralisDataObjectValue } from '@moralisweb3/core';
+import { BigNumber } from 'ethers';
 
 export type TNFTMarketplace = {
   tokenAddress: string;
@@ -19,6 +20,18 @@ export type TNFTMarketplace = {
   amount?: number | undefined;
 };
 
+export type TNFTData = {
+  0: BigNumber | undefined,
+  1: string | undefined,
+  2: BigNumber | undefined,
+  3: string | undefined,
+  4: string | undefined,
+  5: BigNumber | undefined,
+  6: boolean
+}
+
+
 export interface INFTMarketplace {
   items?: TNFTMarketplace[];
+  data?: TNFTData[];
 }

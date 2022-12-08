@@ -17,6 +17,7 @@ export type TNFTBalance = {
   lastMetadataSync?: Date | undefined;
   lastTokenUriSync?: Date | undefined;
   amount?: number | undefined;
+  price?: number | undefined;
 };
 
 export interface INFTBalances {

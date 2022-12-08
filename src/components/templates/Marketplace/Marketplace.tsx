@@ -1,10 +1,12 @@
 import { Box, Grid, Heading } from '@chakra-ui/react';
-import { NFTCard } from 'components/modules';
 import { FC, useEffect } from 'react';
 import { INFTMarketplace } from './types';
+import { ItemCard } from 'components/modules';
 
 const Marketplace: FC<INFTMarketplace> = ({ items }) => {
-    useEffect(() => console.log('Items: ', items), [items]);
+    useEffect(() => {
+        console.log("Items ", items)
+    },[items])
 
     return (
         <>
@@ -13,8 +15,8 @@ const Marketplace: FC<INFTMarketplace> = ({ items }) => {
             </Heading>
             {items?.length ? (
                 <Grid templateColumns="repeat(auto-fit, minmax(280px, 1fr))" gap={6}>
-                    {items.map((item, key) => (
-                        <NFTCard {...item} key={key} />
+                    {items?.map((item, key) => (
+                        <ItemCard {...item} key={key} />
                     ))}
                 </Grid>
             ) : (

@@ -8,9 +8,9 @@ import { Button, Input, Modal } from 'antd';
 import Link from 'next/link';
 import { getExplorer } from '../../../../helpers/networks';
 import constants from '../../../../constants';
-import { usePrepareContractWrite, useContractWrite, useSigner } from 'wagmi';
+import { useSigner } from 'wagmi';
 import styles from "./NFTCard.module.css"
-import { BigNumber, ethers, Signer } from 'ethers';
+import { ethers, Signer } from 'ethers';
 
 const NFTCard: FC<INFTCard> = ({ amount, contractType, name, symbol, metadata, chain, tokenAddress, tokenId }) => {
   const bgColor = useColorModeValue('none', 'gray.700');
